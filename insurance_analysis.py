@@ -11,9 +11,11 @@ import matplotlib.pyplot as plt
 
 data = pd.read_csv('synthetic_insurance_data.csv')
 
-credit_score_cat = []
-
 data.info()
+data.loc[data.duplicated()]
+data.loc[data.isna().any(axis = 1)]
+
+credit_score_cat = []
 
 for i in data['Credit_Score']:
     if i >= 770:
@@ -28,8 +30,14 @@ credit_score_cat = pd.Series(credit_score_cat)
 data['credit_series_category'] = credit_score_cat
 
 cat_graph = data.groupby(['credit_series_category']).size()
-cat_graph.plot.bar(color = 'yellow')
+cat_graph.plot.bar(color = 'green')
 plt.xlabel('Credit Score Category')
 plt.show()
 
-data.to_csv('insurance_data.csv', index = True)
+plt.hist(data['Premium_Amount'], bins=10, edgecolor ="black")
+plt.xlabel("Premium Amount Range")
+plt.ylabel("Frequency")
+plt.title("Histogram of Premium Amount Count")
+plt.show()
+
+data.to_csv('insurance_data_cleaned.csv', index = True)
